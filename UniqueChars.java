@@ -23,9 +23,12 @@ public class UniqueChars
                 newStr = newStr + s.charAt(i); 
 
             }
-            if (s.charAt(i) == ' ')
+            else
             {
-                newStr = newStr + s.charAt(i);
+                if (s.charAt(i) == ' ')
+                {
+                    newStr = newStr + s.charAt(i);
+                }
             }
 
         }
