@@ -14,23 +14,22 @@ public class LoanCalc
      */
 	public static void main(String[] args) {		
 		// Gets the loan data
-		//double loan = Double.parseDouble(args[0]);
-		//double rate = Double.parseDouble(args[1]);
-		//int n = Integer.parseInt(args[2]);
-		//System.out.println("Loan sum = " + loan + ", interest rate = " + rate + "%, periods = " + n);
-		bruteForceSolver(100000, 5, 10, 200);
+		double loan = Double.parseDouble(args[0]);
+		double rate = Double.parseDouble(args[1]);
+		int n = Integer.parseInt(args[2]);
+		System.out.println("Loan sum = " + loan + ", interest rate = " + rate + "%, periods = " + n);
 		
 		// Computes the periodical payment using brute force search
-		//System.out.print("Periodical payment, using brute force: ");
-		//System.out.printf("%.2f", bruteForceSolver(loan, rate, n, epsilon));
-		//System.out.println();
-		//System.out.println("number of iterations: " + iterationCounter);
+		System.out.print("Periodical payment, using brute force: ");
+		System.out.printf("%.2f", bruteForceSolver(loan, rate, n, epsilon));
+		System.out.println();
+		System.out.println("number of iterations: " + iterationCounter);
 
 		// Computes the periodical payment using bisection search
-		//System.out.print("Periodical payment, using bi-section search: ");
-		//System.out.printf("%.2f", bisectionSolver(loan, rate, n, epsilon));
-		//System.out.println();
-		//System.out.println("number of iterations: " + iterationCounter);
+		System.out.print("Periodical payment, using bi-section search: ");
+		System.out.printf("%.2f", bisectionSolver(loan, rate, n, epsilon));
+		System.out.println();
+		System.out.println("number of iterations: " + iterationCounter);
 	}
 	
 	/**
@@ -44,20 +43,18 @@ public class LoanCalc
 	public static double bruteForceSolver(double loan, double rate, int n, double epsilon) 
 	{  
 		double g = loan / n;
-		double endBal = g;
-		while (endBal > 0)
+		//double endBal = g;
+		double increment = 0.001;
+ 		double balance = endBalance( loan , rate , n , g ) ; 
+ 		iterationCounter = 0 ;
+ 		while ((balance >= epsilon) && (balance >= 0)) 
 		{
-			g = g + epsilon;
-			endBal = g;
-			if (endBal > 0)
-			{
-				System.out.println(endBal);
-				endBal = endBalance(loan , rate, n , endBal); //האחרון קורא לעוד חישוב שהוא מינוס אבל מדפיס
-			}
-		}
-
-    		return endBal;
-    	}
+ 			g = g + increment ;
+ 			balance = endBalance( loan , rate , n , g ) ;
+ 			iterationCounter++;
+ 		}
+   		return g ;
+	}
     
     /**
 	* Uses bisection search to compute an approximation of the periodical payment 
@@ -66,9 +63,26 @@ public class LoanCalc
 	* the number of periods (n), and epsilon, a tolerance level.
 	*/
 	// Side effect: modifies the class variable iterationCounter.
-    public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
-    	// Replace the following statement with your code
-    	return 0;
+    public static double bisectionSolver(double loan, double rate, int n, double epsilon) 
+	{  
+		double l = loan / n ;
+    	double h = loan ;
+    	double g = ( l + h ) / 2 ;
+    	iterationCounter = 0;
+    	while ((h - l) > epsilon)
+    	{
+    		if ((endBalance(loan , rate , n , g) * endBalance(loan , rate , n , l)) > 0) 
+			{
+    			l = g ;
+    		}
+    		else 
+			{
+    			h = g ;
+    		}
+    		g = (l + h) / 2 ;
+    		iterationCounter++;
+    	}
+    	return g ;
     }
 	
 	/**
@@ -78,19 +92,10 @@ public class LoanCalc
 	private static double endBalance(double loan, double rate, int n, double payment) 
 	{
 		double balance = loan;
-		System.out.println("Loan: " + loan);
-		System.out.println("Interest rate: " + rate);
-		System.out.println("Periods: " + n);
-		System.out.println("Periodical payment: " + payment);
-		System.out.println();
-		int i;
-		for (i = 0; i <= n; i++)
+		for (int i = 0; i < n; i++)
 		{
-			System.out.println("Period " + i + ": " + balance);
-			if (i < n)
-			{
-				balance = (balance - payment) + ((balance - payment) * rate * 0.01);
-			}
+//			balance = (balance - payment) + ((balance - payment) * rate * 0.01);
+			balance = (balance - payment) + balance * rate * 0.01;
 		}
     		return balance;
 	}

@@ -15,7 +15,6 @@ public class LowerCase
     	public static String lowerCase(String s) 
 	{
 		String newStr = "";
-		int charAs = 0;
 		char ch;
 		int charAsc;
 		int i;
@@ -35,5 +34,5 @@ public class LowerCase
 			}
 		}
 		return newStr;
-    	}
+    }
 }
