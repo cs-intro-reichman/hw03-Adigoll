@@ -6,7 +6,7 @@ public class LoanCalc
 	
 	static double epsilon = 0.001;  // The computation tolerance (estimation error)
 	static int iterationCounter;    // Monitors the efficiency of the calculation
-	
+
     /** 
      * Gets the loan data and computes the periodical payment.
      * Expects to get three command-line arguments: sum of the loan (double),
@@ -43,12 +43,10 @@ public class LoanCalc
 	public static double bruteForceSolver(double loan, double rate, int n, double epsilon) 
 	{  
 		double g = loan / n;
- 		double balance = endBalance( loan , rate , n , g ) ; 
  		iterationCounter = 0 ;
- 		while ((balance >= epsilon) && (balance >= 0)) 
+ 		while (endBalance(loan , rate , n , g) >= epsilon) 
 		{
  			g = g + epsilon ;
- 			balance = endBalance( loan , rate , n , g ) ;
  			iterationCounter++;
  		}
    		return g ;
@@ -92,9 +90,8 @@ public class LoanCalc
 		double balance = loan;
 		for (int i = 0; i < n; i++)
 		{
-//			balance = (balance - payment) + ((balance - payment) * rate * 0.01);
 			balance = (balance - payment) + balance * rate * 0.01;
 		}
-    		return balance;
+    	return balance;
 	}
 }
